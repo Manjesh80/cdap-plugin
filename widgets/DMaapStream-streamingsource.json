@@ -174,7 +174,7 @@
     {
       "widget-type": "non-editable-schema-editor",
       "schema": {
-        "MESSAGE_NUM" : "long",
+        "MESSAGE_NUM" : "string",
         "MESSAGE" : "string"
       }
     }

@@ -139,21 +139,4 @@ public class DMaapStreamConfig extends PluginConfig {
         this.readTimeout = 60 * 1000;
     }
 
-
-    @SuppressWarnings("ConstantConditions")
-    public void validate() {
-        /* if (interval <= 0) {
-            throw new IllegalArgumentException(String.format(
-                    "Invalid interval %d. Interval must be greater than 0.", interval));
-        }
-        if (readTimeout < 0) {
-            throw new IllegalArgumentException(String.format(
-                    "Invalid readTimeout %d. Timeout must be 0 or a positive number.", readTimeout));
-        }
-        try {
-            Charset.forName(charset);
-        } catch (UnsupportedCharsetException e) {
-            throw new IllegalArgumentException(String.format("Invalid charset %s.", charset));
-        } */
-    }
 }
