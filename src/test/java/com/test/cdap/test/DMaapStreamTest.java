@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
+
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
 /**
@@ -43,12 +44,6 @@ import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
  */
 
 public class DMaapStreamTest extends HydratorTestBase {
-
-    @ClassRule
-    public static final TestConfiguration CONFIG = new TestConfiguration("explore.enabled", false);
-
-    protected static final ArtifactId DATAPIPELINE_ARTIFACT_ID = NamespaceId.DEFAULT.artifact("data-pipeline", "3.2.0");
-    protected static final ArtifactSummary DATAPIPELINE_ARTIFACT = new ArtifactSummary("data-pipeline", "3.2.0");
 
     protected static final ArtifactId DATASTREAMS_ARTIFACT_ID = NamespaceId.DEFAULT.artifact("data-streams", "3.2.0");
     protected static final ArtifactSummary DATASTREAMS_ARTIFACT = new ArtifactSummary("data-streams", "3.2.0");
@@ -58,16 +53,10 @@ public class DMaapStreamTest extends HydratorTestBase {
 
     @BeforeClass
     public static void setupTest() throws Exception {
-        // add the artifact for data pipeline app
-        setupBatchArtifacts(DATAPIPELINE_ARTIFACT_ID, DataPipelineApp.class);
 
         setupStreamingArtifacts(DATASTREAMS_ARTIFACT_ID, DataStreamsApp.class);
 
-        // add artifact for spark plugins
         Set<ArtifactRange> parents = ImmutableSet.of(
-                new ArtifactRange(NamespaceId.DEFAULT.toId(), DATAPIPELINE_ARTIFACT_ID.getArtifact(),
-                        new ArtifactVersion(DATAPIPELINE_ARTIFACT_ID.getVersion()), true,
-                        new ArtifactVersion(DATAPIPELINE_ARTIFACT_ID.getVersion()), true),
                 new ArtifactRange(NamespaceId.DEFAULT.toId(), DATASTREAMS_ARTIFACT_ID.getArtifact(),
                         new ArtifactVersion(DATASTREAMS_ARTIFACT_ID.getVersion()), true,
                         new ArtifactVersion(DATASTREAMS_ARTIFACT_ID.getVersion()), true)
@@ -85,9 +74,7 @@ public class DMaapStreamTest extends HydratorTestBase {
     @Test
     public void testDMaapStreamingSource() throws Exception {
 
-        final String deserialiezJSON = "Deserialized JSON";
-
-        Map<String, String> properties = new HashMap<String,String>();
+        Map<String, String> properties = new HashMap<String, String>();
         properties.put("dmaapHostName", "dmaapHostName");
         properties.put("dmaapTopicName", "dmaapTopicName");
         properties.put("dmaapProtocol", "dmaapProtocol");
