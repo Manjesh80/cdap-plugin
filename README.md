@@ -2,26 +2,10 @@ Build
 -----
 To build your plugins:
 
-    mvn clean package -DskipTests
+    mvn clean compile -DskipTests
 
-The build will create a .jar and .json file under the ``target`` directory.
-These files can be used to deploy your plugins.
+    In IntelliJ debug DMaapStreamTest.testDMaapStreamingSource
 
-UI Integration
---------------
-The Cask Hydrator UI displays each plugin property as a simple textbox. To customize how the plugin properties
-are displayed in the UI, you can place a configuration file in the ``widgets`` directory.
-The file must be named following a convention of ``[plugin-name]-[plugin-type].json``.
-
-See [Plugin Widget Configuration](http://docs.cdap.io/cdap/current/en/hydrator-manual/developing-plugins/packaging-plugins.html#plugin-widget-json)
-for details on the configuration file.
-
-The UI will also display a reference doc for your plugin if you place a file in the ``docs`` directory
-that follows the convention of ``[plugin-name]-[plugin-type].md``.
-
-When the build runs, it will scan the ``widgets`` and ``docs`` directories in order to build an appropriately
-formatted .json file under the ``target`` directory. This file is deployed along with your .jar file to add your
-plugins to CDAP.
 
 Deployment
 ----------
