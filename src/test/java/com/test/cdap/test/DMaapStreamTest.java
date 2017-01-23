@@ -123,13 +123,13 @@ public class DMaapStreamTest extends HydratorTestBase {
                         for (StructuredRecord record : MockSink.readOutput(outputManager)) {
                             dmaapContents.add((String) record.get("MESSAGE"));
                         }
-                        return dmaapContents.size() == 4;
+                        return dmaapContents.size() >= 4;
                     }
                 },
                 1, TimeUnit.MINUTES);
 
-        Assert.assertThat(dmaapContents, contains("Message 2"));
-        Assert.assertThat(dmaapContents, contains("Message 3"));
+        Assert.assertThat(dmaapContents,contains("Message 2"));
+        Assert.assertThat(dmaapContents,contains("Message 3"));
         sparkManager.stop();
 
 

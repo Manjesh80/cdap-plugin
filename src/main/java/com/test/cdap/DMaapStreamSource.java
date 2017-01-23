@@ -3,6 +3,7 @@ package com.test.cdap;
 import co.cask.cdap.api.annotation.Description;
 import co.cask.cdap.api.annotation.Name;
 import co.cask.cdap.api.annotation.Plugin;
+import co.cask.cdap.api.data.schema.Schema;
 import co.cask.cdap.api.data.format.StructuredRecord;
 import co.cask.cdap.etl.api.streaming.StreamingContext;
 import co.cask.cdap.etl.api.streaming.StreamingSource;
@@ -57,8 +58,9 @@ public class DMaapStreamSource extends StreamingSource<StructuredRecord> {
 
                     @Override
                     public void run() {
+                        AtomicInteger serialNumber = new AtomicInteger();
+
                         while (!isStopped()) {
-                            AtomicInteger serialNumber = new AtomicInteger();
                             try {
                                 TimeUnit.MILLISECONDS.sleep(100);
 
