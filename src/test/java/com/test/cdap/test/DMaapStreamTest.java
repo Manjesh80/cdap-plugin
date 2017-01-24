@@ -4,7 +4,6 @@ import co.cask.cdap.api.artifact.ArtifactVersion;
 import co.cask.cdap.api.data.format.StructuredRecord;
 import co.cask.cdap.api.dataset.table.Table;
 import co.cask.cdap.common.utils.Tasks;
-import co.cask.cdap.datapipeline.DataPipelineApp;
 import co.cask.cdap.datastreams.DataStreamsApp;
 import co.cask.cdap.datastreams.DataStreamsSparkLauncher;
 import co.cask.cdap.etl.api.streaming.StreamingSource;
@@ -13,7 +12,6 @@ import co.cask.cdap.etl.mock.test.HydratorTestBase;
 import co.cask.cdap.etl.proto.v2.DataStreamsConfig;
 import co.cask.cdap.etl.proto.v2.ETLPlugin;
 import co.cask.cdap.etl.proto.v2.ETLStage;
-import co.cask.cdap.proto.Id;
 import co.cask.cdap.proto.artifact.AppRequest;
 import co.cask.cdap.proto.artifact.ArtifactRange;
 import co.cask.cdap.proto.artifact.ArtifactSummary;
@@ -23,8 +21,7 @@ import co.cask.cdap.proto.id.NamespaceId;
 import co.cask.cdap.test.ApplicationManager;
 import co.cask.cdap.test.DataSetManager;
 import co.cask.cdap.test.SparkManager;
-import co.cask.cdap.test.TestConfiguration;
-import com.test.cdap.DMaapStreamConfig;
+import com.test.cdap.DMaaPStreamingConfig;
 import com.test.cdap.DMaapStreamSource;
 import com.google.common.collect.ImmutableSet;
 import org.junit.*;
@@ -63,7 +60,7 @@ public class DMaapStreamTest extends HydratorTestBase {
         );
 
         addPluginArtifact(NamespaceId.DEFAULT.artifact("spark-plugins", "1.0.0"), parents, DMaapStreamSource.class,
-                DMaapStreamConfig.class);
+                DMaaPStreamingConfig.class);
     }
 
     @AfterClass
@@ -128,10 +125,8 @@ public class DMaapStreamTest extends HydratorTestBase {
                 },
                 1, TimeUnit.MINUTES);
 
-        Assert.assertThat(dmaapContents,contains("Message 2"));
-        Assert.assertThat(dmaapContents,contains("Message 3"));
+        Assert.assertTrue(dmaapContents.contains("Message 2"));
+        Assert.assertTrue(dmaapContents.contains("Message 3"));
         sparkManager.stop();
-
-
     }
 }

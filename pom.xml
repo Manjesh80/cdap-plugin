@@ -41,6 +41,8 @@
         <main.basedir>${project.basedir}</main.basedir>
         <junit.version>4.12</junit.version>
         <mockito.version>2.2.11</mockito.version>
+        <jackson.json.version>2.8.5</jackson.json.version>
+        <!-- <jackson.json.version>2.4.6</jackson.json.version> -->
     </properties>
 
     <repositories>
@@ -164,6 +166,22 @@
             <artifactId>hamcrest-library</artifactId>
             <version>1.3</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.json.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.json.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.json.version}</version>
         </dependency>
     </dependencies>
 

@@ -3,20 +3,13 @@ package com.test.cdap;
 import co.cask.cdap.api.annotation.Description;
 import co.cask.cdap.api.annotation.Name;
 import co.cask.cdap.api.annotation.Plugin;
-import co.cask.cdap.api.data.schema.Schema;
 import co.cask.cdap.api.data.format.StructuredRecord;
 import co.cask.cdap.etl.api.streaming.StreamingContext;
 import co.cask.cdap.etl.api.streaming.StreamingSource;
 import org.apache.spark.storage.StorageLevel;
 import org.apache.spark.streaming.api.java.JavaDStream;
-import org.apache.spark.streaming.receiver.Receiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import co.cask.cdap.api.data.schema.Schema;
 
 /**
  * Created by cdap on 10/14/16.
@@ -28,20 +21,27 @@ import co.cask.cdap.api.data.schema.Schema;
 public class DMaapStreamSource extends StreamingSource<StructuredRecord> {
     public static long messageCount = 1;
     private static final Logger LOG = LoggerFactory.getLogger(DMaapStreamSource.class);
-    private final DMaapStreamConfig conf;
+    private final DMaaPStreamingConfig conf;
 
-    private static final Schema OUTPUT_SCHEMA =
+    /*private static final Schema OUTPUT_SCHEMA =
             Schema.recordOf("outputSchema",
                     Schema.Field.of("MESSAGE_NUM", Schema.of(Schema.Type.STRING)),
-                    Schema.Field.of("MESSAGE", Schema.of(Schema.Type.STRING)));
+                    Schema.Field.of("MESSAGE", Schema.of(Schema.Type.STRING)));*/
 
 
-    public DMaapStreamSource(DMaapStreamConfig conf) {
+    public DMaapStreamSource(DMaaPStreamingConfig conf) {
         this.conf = conf;
         LOG.error("Ganesh ==> " + DMaapStreamSource.class.getClassLoader().toString());
     }
 
     @Override
+    public JavaDStream<StructuredRecord> getStream(StreamingContext streamingContext) throws Exception {
+        return streamingContext.getSparkStreamingContext().receiverStream(
+                new DMaaPReceiverDemo(StorageLevel.MEMORY_ONLY(), this.conf));
+    }
+}
+
+   /* @Override
     public JavaDStream<StructuredRecord> getStream(StreamingContext streamingContext) throws Exception {
 
         LOG.error("Test conf " + conf.getDMaapHostName());
@@ -91,6 +91,5 @@ public class DMaapStreamSource extends StreamingSource<StructuredRecord> {
         };
 
         return streamingContext.getSparkStreamingContext().receiverStream(dmaapReceiver);
-    }
+    }*/
 
-}

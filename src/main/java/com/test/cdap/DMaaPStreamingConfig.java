@@ -3,7 +3,6 @@ package com.test.cdap;
 import co.cask.cdap.api.annotation.Description;
 import co.cask.cdap.api.annotation.Name;
 import co.cask.cdap.api.plugin.PluginConfig;
-import co.cask.cdap.datastreams.DataStreamsApp;
 
 import javax.annotation.Nullable;
 
@@ -13,7 +12,7 @@ import javax.annotation.Nullable;
  */
 
 
-public class DMaapStreamConfig extends PluginConfig {
+public class DMaaPStreamingConfig extends PluginConfig {
 
 
     @Description("The amount of time to wait between each poll in seconds.")
@@ -126,15 +125,15 @@ public class DMaapStreamConfig extends PluginConfig {
         return dmaapMessageLimit;
     }
 
-    public DMaapStreamConfig() {
+    public DMaaPStreamingConfig() {
         this("", null, 60);
     }
 
-    public DMaapStreamConfig(String referenceName, String url, long interval) {
+    public DMaaPStreamingConfig(String referenceName, String url, long interval) {
         this(referenceName, url, interval, null);
     }
 
-    public DMaapStreamConfig(String referenceName, String url, long interval, String requestHeaders) {
+    public DMaaPStreamingConfig(String referenceName, String url, long interval, String requestHeaders) {
         this.interval = interval;
         this.readTimeout = 60 * 1000;
     }
