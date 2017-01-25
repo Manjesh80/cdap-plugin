@@ -6,8 +6,10 @@ import co.cask.cdap.api.annotation.Plugin;
 import co.cask.cdap.api.data.format.StructuredRecord;
 import co.cask.cdap.etl.api.streaming.StreamingContext;
 import co.cask.cdap.etl.api.streaming.StreamingSource;
+import com.test.cdap.common.AbstractStreamingSource;
 import org.apache.spark.storage.StorageLevel;
 import org.apache.spark.streaming.api.java.JavaDStream;
+import org.apache.spark.streaming.receiver.Receiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,30 +20,36 @@ import org.slf4j.LoggerFactory;
 @Plugin(type = StreamingSource.PLUGIN_TYPE)
 @Name("DMaapStream")
 @Description("Fetch data by performing a PULL request to DMaaP at a regular interval.")
-public class DMaapStreamSource extends StreamingSource<StructuredRecord> {
+//public class DMaapStreamSource extends StreamingSource<StructuredRecord> {
+public class DMaapStreamSource extends AbstractStreamingSource {
     public static long messageCount = 1;
     private static final Logger LOG = LoggerFactory.getLogger(DMaapStreamSource.class);
     private final DMaaPStreamingConfig conf;
 
-    /*private static final Schema OUTPUT_SCHEMA =
-            Schema.recordOf("outputSchema",
-                    Schema.Field.of("MESSAGE_NUM", Schema.of(Schema.Type.STRING)),
-                    Schema.Field.of("MESSAGE", Schema.of(Schema.Type.STRING)));*/
-
-
     public DMaapStreamSource(DMaaPStreamingConfig conf) {
         this.conf = conf;
-        LOG.error("Ganesh ==> " + DMaapStreamSource.class.getClassLoader().toString());
     }
+
+    @Override
+    public Receiver<StructuredRecord> getReceiver() {
+        return null;
+    }
+}
+
+   /*
 
     @Override
     public JavaDStream<StructuredRecord> getStream(StreamingContext streamingContext) throws Exception {
         return streamingContext.getSparkStreamingContext().receiverStream(
                 new DMaaPReceiverDemo(StorageLevel.MEMORY_ONLY(), this.conf));
     }
-}
 
-   /* @Override
+    private static final Schema OUTPUT_SCHEMA =
+        Schema.recordOf("outputSchema",
+                Schema.Field.of("MESSAGE_NUM", Schema.of(Schema.Type.STRING)),
+                Schema.Field.of("MESSAGE", Schema.of(Schema.Type.STRING)));
+
+    @Override
     public JavaDStream<StructuredRecord> getStream(StreamingContext streamingContext) throws Exception {
 
         LOG.error("Test conf " + conf.getDMaapHostName());
