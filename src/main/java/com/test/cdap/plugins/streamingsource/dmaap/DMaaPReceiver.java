@@ -1,10 +1,6 @@
 package com.test.cdap.plugins.streamingsource.dmaap;
 
-import co.cask.cdap.api.data.schema.Schema;
-import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
 import com.test.cdap.plugins.streamingsource.common.AbstractReceiver;
-import com.test.cdap.plugins.streamingsource.common.CustomReceiver;
 import com.test.cdap.plugins.streamingsource.dmaap.config.DMaaPStreamingConfig;
 import com.test.cdap.plugins.streamingsource.dmaap.guice.DMaaPPluginFactory;
 import org.apache.spark.storage.StorageLevel;

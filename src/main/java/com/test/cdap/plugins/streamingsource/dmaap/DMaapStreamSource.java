@@ -7,7 +7,6 @@ import co.cask.cdap.api.data.format.StructuredRecord;
 import co.cask.cdap.etl.api.streaming.StreamingSource;
 import com.test.cdap.plugins.streamingsource.common.AbstractStreamingSource;
 import com.test.cdap.plugins.streamingsource.dmaap.config.DMaaPStreamingConfig;
-import com.test.cdap.plugins.streamingsource.dmaap.guice.DMaaPPluginFactory;
 import org.apache.spark.storage.StorageLevel;
 import org.apache.spark.streaming.receiver.Receiver;
 import org.slf4j.Logger;
