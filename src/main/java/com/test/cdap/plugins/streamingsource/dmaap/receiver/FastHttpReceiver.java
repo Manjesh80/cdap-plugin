@@ -2,8 +2,12 @@ package com.test.cdap.plugins.streamingsource.dmaap.receiver;
 
 import co.cask.cdap.api.data.format.StructuredRecord;
 import co.cask.cdap.api.data.schema.Schema;
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import com.test.cdap.plugins.streamingsource.common.AbstractReceiver;
 import com.test.cdap.plugins.streamingsource.common.CustomReceiver;
+import com.test.cdap.plugins.streamingsource.dmaap.config.DMaaPStreamingConfig;
+import org.apache.spark.storage.StorageLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +20,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class FastHttpReceiver implements CustomReceiver {
 
     AbstractReceiver abstractReceiver;
+    DMaaPStreamingConfig dmaapStreamingConfig;
+
+    @Inject
+    public FastHttpReceiver(@Assisted DMaaPStreamingConfig dmaapStreamingConfig) {
+        this.dmaapStreamingConfig = dmaapStreamingConfig;
+    }
 
     private static final Logger LOG = LoggerFactory.getLogger(FastHttpReceiver.class);
 

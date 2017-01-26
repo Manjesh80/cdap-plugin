@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 @Name("DMaapStream")
 @Description("Fetch data by performing a PULL request to DMaaP at a regular interval.")
 public class DMaapStreamSource extends AbstractStreamingSource {
-    public static long messageCount = 1;
     private static final Logger LOG = LoggerFactory.getLogger(DMaapStreamSource.class);
     private final DMaaPStreamingConfig conf;
 
@@ -31,8 +30,7 @@ public class DMaapStreamSource extends AbstractStreamingSource {
 
     @Override
     public Receiver<StructuredRecord> getReceiver() {
-        return DMaaPPluginFactory.create().createDMaaPReceiver(StorageLevel.MEMORY_ONLY(), this.conf);
-        //return new DMaaPReceiver(StorageLevel.MEMORY_ONLY(), this.conf, new FastHttpReceiver());
+        return new DMaaPReceiver(StorageLevel.MEMORY_ONLY(), this.conf);
     }
 }
 

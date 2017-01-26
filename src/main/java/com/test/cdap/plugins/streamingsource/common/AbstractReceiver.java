@@ -14,9 +14,8 @@ public abstract class AbstractReceiver extends Receiver<StructuredRecord> {
     protected CustomReceiver customReceiver;
     protected PluginConfig pluginConfig;
 
-    public AbstractReceiver(StorageLevel storageLevel, CustomReceiver customReceiver, PluginConfig pluginConfig) {
+    public AbstractReceiver(StorageLevel storageLevel, PluginConfig pluginConfig) {
         super(storageLevel);
-        this.customReceiver = customReceiver;
         this.pluginConfig = pluginConfig;
     }
 

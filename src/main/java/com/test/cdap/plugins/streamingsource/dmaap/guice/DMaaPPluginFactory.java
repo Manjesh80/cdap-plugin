@@ -4,10 +4,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.assistedinject.Assisted;
-import com.test.cdap.plugins.streamingsource.dmaap.DMaaPReceiver;
+import com.test.cdap.plugins.streamingsource.common.CustomReceiver;
 import com.test.cdap.plugins.streamingsource.dmaap.config.DMaaPStreamingConfig;
-import org.apache.spark.storage.StorageLevel;
-import org.apache.spark.streaming.receiver.Receiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,8 +22,10 @@ public class DMaaPPluginFactory {
         injector = Guice.createInjector(guiceModule);
     }
 
-    public DMaaPReceiver createDMaaPReceiver(@Assisted StorageLevel storageLevel, @Assisted DMaaPStreamingConfig conf){
-        return new DMaaPReceiver(storageLevel, conf,null);
+    public CustomReceiver createCustomReceiver(@Assisted DMaaPStreamingConfig dMaaPStreamingConfig) {
+        final CustomReceiverFactory customReceiverFactory = injector.getInstance(CustomReceiverFactory.class);
+        final CustomReceiver customReceiver = customReceiverFactory.create(dMaaPStreamingConfig);
+        return customReceiver;
     }
 
     public static DMaaPPluginFactory create() {
