@@ -1,4 +1,4 @@
-package com.test.cdap.common;
+package com.test.cdap.plugins.streamingsource.common;
 
 import co.cask.cdap.api.data.format.StructuredRecord;
 import co.cask.cdap.etl.api.streaming.StreamingContext;

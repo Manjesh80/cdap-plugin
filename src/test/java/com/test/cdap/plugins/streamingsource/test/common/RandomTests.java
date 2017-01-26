@@ -1,4 +1,4 @@
-package com.test.cdap.test;
+package com.test.cdap.plugins.streamingsource.test.common;
 
 import org.junit.Assert;
 import org.junit.Test;

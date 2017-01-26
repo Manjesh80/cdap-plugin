@@ -1,4 +1,4 @@
-package com.test.cdap;
+package com.test.cdap.plugins.streamingsource.dmaap.config;
 
 import co.cask.cdap.api.annotation.Description;
 import co.cask.cdap.api.annotation.Name;

@@ -1,4 +1,4 @@
-package com.test.cdap.test;
+package com.test.cdap.plugins.streamingsource.test.dmaap;
 
 import co.cask.cdap.api.artifact.ArtifactVersion;
 import co.cask.cdap.api.data.format.StructuredRecord;
@@ -21,9 +21,11 @@ import co.cask.cdap.proto.id.NamespaceId;
 import co.cask.cdap.test.ApplicationManager;
 import co.cask.cdap.test.DataSetManager;
 import co.cask.cdap.test.SparkManager;
-import com.test.cdap.DMaaPStreamingConfig;
-import com.test.cdap.DMaapStreamSource;
+import com.test.cdap.plugins.streamingsource.dmaap.config.DMaaPStreamingConfig;
+import com.test.cdap.plugins.streamingsource.dmaap.DMaapStreamSource;
 import com.google.common.collect.ImmutableSet;
+import com.test.cdap.plugins.streamingsource.dmaap.receiver.FastHttpReceiver;
+import com.test.cdap.plugins.streamingsource.dmaap.receiver.MockHttpReceiver;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 
@@ -40,7 +42,7 @@ import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
  * Created by cdap on 10/18/16.
  */
 
-public class DMaapStreamTest extends HydratorTestBase {
+public class DMaapStreamUnitTest extends HydratorTestBase {
 
     protected static final ArtifactId DATASTREAMS_ARTIFACT_ID = NamespaceId.DEFAULT.artifact("data-streams", "3.2.0");
     protected static final ArtifactSummary DATASTREAMS_ARTIFACT = new ArtifactSummary("data-streams", "3.2.0");
@@ -59,8 +61,9 @@ public class DMaapStreamTest extends HydratorTestBase {
                         new ArtifactVersion(DATASTREAMS_ARTIFACT_ID.getVersion()), true)
         );
 
-        addPluginArtifact(NamespaceId.DEFAULT.artifact("spark-plugins", "1.0.0"), parents, DMaapStreamSource.class,
-                DMaaPStreamingConfig.class);
+        addPluginArtifact(NamespaceId.DEFAULT.artifact("spark-plugins", "1.0.0"), parents,
+                DMaapStreamSource.class, DMaaPStreamingConfig.class,
+                MockHttpReceiver.class, FastHttpReceiver.class);
     }
 
     @AfterClass
@@ -71,7 +74,7 @@ public class DMaapStreamTest extends HydratorTestBase {
     @Test
     public void testDMaapStreamingSource() throws Exception {
 
-        Map<String, String> properties = new HashMap<String, String>();
+        Map<String, String> properties = new HashMap<>();
         properties.put("dmaapHostName", "dmaapHostName");
         properties.put("dmaapTopicName", "dmaapTopicName");
         properties.put("dmaapProtocol", "dmaapProtocol");
@@ -125,8 +128,8 @@ public class DMaapStreamTest extends HydratorTestBase {
                 },
                 1, TimeUnit.MINUTES);
 
-        Assert.assertTrue(dmaapContents.contains("Message 2"));
-        Assert.assertTrue(dmaapContents.contains("Message 3"));
+        Assert.assertTrue(dmaapContents.contains("Message 102"));
+        Assert.assertTrue(dmaapContents.contains("Message 103"));
         sparkManager.stop();
     }
 }
