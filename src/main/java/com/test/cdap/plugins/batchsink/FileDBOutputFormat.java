@@ -31,11 +31,13 @@ public class FileDBOutputFormat<K, V> extends OutputFormat<K, V> {
 
     @Override
     public OutputCommitter getOutputCommitter(TaskAttemptContext taskAttemptContext) throws IOException, InterruptedException {
+        LOG.error("**** FileDBOutputFormat.getOutputCommitter ****");
         return new FileDBOutputCommitter();
     }
 
     @Override
     public RecordWriter<K, V> getRecordWriter(TaskAttemptContext taskAttemptContext) throws IOException, InterruptedException {
+        LOG.error("**** FileDBOutputFormat.getRecordWriter ****");
         return new FileDBWriter<K, V>();
     }
 }

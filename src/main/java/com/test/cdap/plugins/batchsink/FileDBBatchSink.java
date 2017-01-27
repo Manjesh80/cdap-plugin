@@ -39,6 +39,10 @@ public class FileDBBatchSink extends ReferenceBatchSink<StructuredRecord, NullWr
     @Override
     public void prepareRun(BatchSinkContext batchSinkContext) throws Exception {
         LOG.error("Invoking Prepare RUN");
+        if (config == null)
+            LOG.error("!!! Config is null !!!");
+        else
+            LOG.error("**** Config is NOT null **** ");
         batchSinkContext.addOutput(Output.of(config.referenceName, new FileDBOutputFormatProvider(config)));
     }
 
@@ -46,10 +50,12 @@ public class FileDBBatchSink extends ReferenceBatchSink<StructuredRecord, NullWr
     public void transform(StructuredRecord input, Emitter<KeyValue<NullWritable, String>> emitter) throws Exception {
         LOG.error("Calling Transform");
         for (Schema.Field field : input.getSchema().getFields()) {
-            LOG.error("Received filed ==> " + field.getName().toLowerCase());
-            if (field.getName().toLowerCase() == "message") {
+            LOG.error("Received field ==> " + field.getName().toLowerCase());
+            if (field.getName().toLowerCase().equals("message")) {
                 LOG.error("Emiting message ==> " + input.get(field.getName()).toString());
                 emitter.emit(new KeyValue<>(NullWritable.get(), input.get(field.getName()).toString()));
+            } else {
+                LOG.error("Non message field received");
             }
         }
     }

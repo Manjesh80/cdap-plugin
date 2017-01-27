@@ -15,17 +15,20 @@ public class FileDBOutputFormatProvider implements OutputFormatProvider {
     private final Map<String, String> conf;
 
     public FileDBOutputFormatProvider(FileDBBatchSink.FileDBSinkConfig config) {
+        LOG.error("Creating FileDBOutputFormatProvider");
         this.conf = new HashMap<>();
+        LOG.error(" FileDBOutputFormatProvider ==> Adding value");
         conf.put("filedb.filename", config.filename);
+        LOG.error(" FileDBOutputFormatProvider ==> Adding value done");
     }
 
     @Override
     public String getOutputFormatClassName() {
-        return null;
+        return FileDBOutputFormat.class.getName();
     }
 
     @Override
     public Map<String, String> getOutputFormatConfiguration() {
-        return null;
+        return conf;
     }
 }

@@ -16,26 +16,27 @@ public class FileDBOutputCommitter extends OutputCommitter {
 
     @Override
     public void setupJob(JobContext jobContext) throws IOException {
-
+        LOG.error("FileDBOutputCommitter.setupJob");
     }
 
     @Override
     public void setupTask(TaskAttemptContext taskAttemptContext) throws IOException {
-
+        LOG.error("FileDBOutputCommitter.setupTask");
     }
 
     @Override
     public boolean needsTaskCommit(TaskAttemptContext taskAttemptContext) throws IOException {
+        LOG.error("FileDBOutputCommitter.needsTaskCommit");
         return false;
     }
 
     @Override
     public void commitTask(TaskAttemptContext taskAttemptContext) throws IOException {
-
+        LOG.error("FileDBOutputCommitter.commitTask");
     }
 
     @Override
     public void abortTask(TaskAttemptContext taskAttemptContext) throws IOException {
-
+        LOG.error("FileDBOutputCommitter.abortTask");
     }
 }
