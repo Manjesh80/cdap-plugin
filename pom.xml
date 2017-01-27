@@ -245,6 +245,7 @@
                         <_exportcontents>
                             com.test.cdap.*;
                             com.test.cdap.plugins.realtimesink.*;
+                            com.test.cdap.plugins.batchsink.*;
                         </_exportcontents>
                     </instructions>
                 </configuration>

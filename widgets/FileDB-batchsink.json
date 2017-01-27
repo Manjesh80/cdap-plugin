@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "spec-version": "1.0"
+  },
+  "configuration-groups": [
+    {
+      "label": "FileDB Configuration",
+      "properties": [
+        {
+          "widget-type": "textbox",
+          "label": "Reference Name",
+          "name": "referenceName"
+        },
+        {
+          "widget-type": "textbox",
+          "label": "Filename",
+          "name": "filename",
+          "widget-attributes": {
+            "width": "large"
+          }
+        }
+      ]
+    }
+  ],
+  "outputs": []
+}
