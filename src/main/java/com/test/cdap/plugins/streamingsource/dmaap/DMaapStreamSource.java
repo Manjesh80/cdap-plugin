@@ -32,4 +32,3 @@ public class DMaapStreamSource extends AbstractStreamingSource {
         return new DMaaPReceiver(StorageLevel.MEMORY_ONLY(), this.conf);
     }
 }
-

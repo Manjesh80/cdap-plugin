@@ -1,4 +1,4 @@
-package com.test.cdap.plugins.streamingsource.test.dmaap;
+package com.test.cdap.plugins.streamingsource.test.dmaap.it.bak;
 
 import co.cask.cdap.api.artifact.ArtifactVersion;
 import co.cask.cdap.api.data.format.StructuredRecord;
@@ -26,11 +26,11 @@ import com.test.cdap.plugins.streamingsource.dmaap.DMaapStreamSource;
 import com.test.cdap.plugins.streamingsource.dmaap.config.DMaaPStreamingConfig;
 import com.test.cdap.plugins.streamingsource.dmaap.receiver.FastHttpReceiver;
 import com.test.cdap.plugins.streamingsource.dmaap.receiver.MockHttpReceiver;
-import org.junit.AfterClass;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.ClassRule;
-import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.util.HashMap;
@@ -41,10 +41,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by cdap on 10/18/16.
+ * Author: mg153v (Manjesh Gowda). Creation Date: 2/1/2017.
  */
-
-public class DMaapStreamIntegrationTest extends HydratorTestBase {
+public class DMaaPSteps extends HydratorTestBase {
 
     protected static final ArtifactId DATASTREAMS_ARTIFACT_ID = NamespaceId.DEFAULT.artifact("data-streams", "3.2.0");
     protected static final ArtifactSummary DATASTREAMS_ARTIFACT = new ArtifactSummary("data-streams", "3.2.0");
@@ -52,9 +51,9 @@ public class DMaapStreamIntegrationTest extends HydratorTestBase {
     @ClassRule
     public static TemporaryFolder tmpFolder = new TemporaryFolder();
 
-    @BeforeClass
-    public static void setupTest() throws Exception {
-
+    @Given("^dmaap pipeline is setup$")
+    public void dmaapPipelineIsSetup() throws Throwable {
+        System.out.println("dmaap pipeline is setup --> Started");
         setupStreamingArtifacts(DATASTREAMS_ARTIFACT_ID, DataStreamsApp.class);
 
         Set<ArtifactRange> parents = ImmutableSet.of(
@@ -66,15 +65,13 @@ public class DMaapStreamIntegrationTest extends HydratorTestBase {
         addPluginArtifact(NamespaceId.DEFAULT.artifact("spark-plugins", "1.0.0"), parents,
                 DMaapStreamSource.class, DMaaPStreamingConfig.class,
                 MockHttpReceiver.class, FastHttpReceiver.class);
+
+        System.out.println("dmaap pipeline is setup --> Completed");
     }
 
-    @AfterClass
-    public static void cleanup() {
-    }
-
-    @Test
-    public void testDMaapStreamingSource() throws Exception {
-
+    @When("^sample message is sent to the DMaaP topic$")
+    public void sampleMessageIsSentToTheDMaaPTopic() throws Throwable {
+        System.out.println("sample message is sent to the DMaaP topic ");
         Map<String, String> properties = new HashMap<>();
         properties.put("dmaapHostName", "dmaapHostName");
         properties.put("dmaapTopicName", "dmaapTopicName");
@@ -134,4 +131,8 @@ public class DMaapStreamIntegrationTest extends HydratorTestBase {
         sparkManager.stop();
     }
 
+    @Then("^sample collection container should have sample messages$")
+    public void sampleCollectionContainerShouldHaveSampleMessages() throws Throwable {
+        System.out.println("sample collection container should have sample messages ");
+    }
 }
