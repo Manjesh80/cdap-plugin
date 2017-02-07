@@ -11,6 +11,8 @@ import org.apache.spark.storage.StorageLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -41,29 +43,53 @@ public class FastHttpReceiver implements CustomReceiver {
             @Override
             public void run() {
                 AtomicInteger serialNumber = new AtomicInteger(200);
+                boolean messagesEmitted = false;
+
+                while (!abstractReceiver.isStopped()) {
+
+                    if (!messagesEmitted) {
+                        messagesEmitted = true;
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(1000);
+                            LOG.error("!!!!!!!!!!!!! Emitting message Version 4 !!!!!!!!!!!!!!");
+
+                            List<String> messages = new LinkedList<>();
+
+                            messages.add("{\"cef\":{\"event\":{\"id\":\"id-1\",\"city\":\"Princeton\",\"state\":\"NJ\",\"country\":\"USA\"}}}");
+                            messages.add("{\"cef\":{\"event\":{\"id\":\"id-1\",\"city\":\"Princeton\",\"state\":\"NJ\",\"country\":\"USA\"}}}");
+                            messages.add("{\"cef\":{\"event\":{\"id\":\"id-1\",\"city\":\"Princeton\",\"state\":\"NJ\",\"country\":\"USA\"}}}");
+                            messages.add("{\"cef\":{\"event\":{\"id\":\"id-1\",\"city\":\"Princeton\",\"state\":\"NJ\",\"country\":\"USA\"}}}");
+                            messages.add("{\"cef\":{\"event\":{\"id\":\"id-1\",\"city\":\"Princeton\",\"state\":\"NJ\",\"country\":\"USA\"}}}");
+
+                            messages.add("{\"cef\":{\"event\":{\"id\":\"id-1\",\"country\":\"USA\"}}}");
+
+                            messages.add("{\"cef\":{\"event\":{\"id\":\"id-1\",\"city\":\"Princeton\",\"state\":\"NJ\",\"country\":\"USA\"}}}");
+                            messages.add("{\"cef\":{\"event\":{\"id\":\"id-1\",\"city\":\"Princeton\",\"state\":\"NJ\",\"country\":\"USA\"}}}");
+                            messages.add("{\"cef\":{\"event\":{\"id\":\"id-1\",\"city\":\"Princeton\",\"state\":\"NJ\",\"country\":\"USA\"}}}");
+                            messages.add("{\"cef\":{\"event\":{\"id\":\"id-1\",\"city\":\"Princeton\",\"state\":\"NJ\",\"country\":\"USA\"}}}");
+                            messages.add("{\"cef\":{\"event\":{\"id\":\"id-1\",\"city\":\"Princeton\",\"state\":\"NJ\",\"country\":\"USA\"}}}");
 
 
-                //while (!abstractReceiver.isStopped()) {
-                for (int i = 0; i < 5; i++) {
+                            for (String msg : messages) {
+                                TimeUnit.MILLISECONDS.sleep(100);
+                                abstractReceiver.store(StructuredRecord.builder(OUTPUT_SCHEMA).
+                                        set("MESSAGE_NUM", Long.toString(System.currentTimeMillis())).
+                                        set("MESSAGE", msg)
+                                        .build());
+                            }
+
+                        } catch (Exception e) {
+                            LOG.error("Error getting content from {}.", e);
+                        }
+                    }
+
                     try {
                         TimeUnit.MILLISECONDS.sleep(1000);
-                        LOG.error("Version 2");
-                        LOG.error("!!!!!!!!!!!!! Emitting message !!!!!!!!!!!!!!");
-                        abstractReceiver.store(StructuredRecord.builder(OUTPUT_SCHEMA).
-                                set("MESSAGE_NUM", Long.toString(System.currentTimeMillis())).
-                                set("MESSAGE", getGoodMessage())
-                                .build());
-
-                        TimeUnit.MILLISECONDS.sleep(1000);
-                        abstractReceiver.store(StructuredRecord.builder(OUTPUT_SCHEMA).
-                                set("MESSAGE_NUM", Long.toString(System.currentTimeMillis())).
-                                set("MESSAGE", getBadMessage())
-                                .build());
-
-                    } catch (Exception e) {
-                        LOG.error("Error getting content from {}.", e);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                }
+
+                } // while (!abstractReceiver.isStopped())
             }
 
             @Override
@@ -75,29 +101,10 @@ public class FastHttpReceiver implements CustomReceiver {
 
     String getGoodMessage() {
         return "{\"cef\":{\"event\":{\"id\":\"id-1\",\"city\":\"Princeton\",\"state\":\"NJ\",\"country\":\"USA\"}}}";
-        /*return "{\n" +
-                "  \"cef\": {\n" +
-                "    \"event\": {\n" +
-                "      \"id\": \"id-1\",\n" +
-                "      \"city\": \"Princeton\",\n" +
-                "      \"state\": \"NJ\",\n" +
-                "      \"country\": \"USA\"\n" +
-                "    }\n" +
-                "  }\n" +
-                "}";*/
-
     }
 
     String getBadMessage() {
         return "{\"cef\":{\"event\":{\"id\":\"id-1\",\"country\":\"USA\"}}}";
-        /*return "{\n" +
-                "  \"cef\": {\n" +
-                "    \"event\": {\n" +
-                "      \"id\": \"id-1\",\n" +
-                "      \"country\": \"USA\"\n" +
-                "    }\n" +
-                "  }\n" +
-                "}";*/
     }
 
     @Override
