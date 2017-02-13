@@ -1,0 +1,2 @@
+com.test.cdap.plugins.streamingsource.dmaap.guice.DMaaPPluginModule
+com.test.cdap.plugins.streamingsource.test.dmaap.MockDMaaPPluginModule

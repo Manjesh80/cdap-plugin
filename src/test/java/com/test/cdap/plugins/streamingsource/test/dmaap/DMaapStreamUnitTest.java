@@ -24,11 +24,15 @@ import co.cask.cdap.test.SparkManager;
 import com.test.cdap.plugins.streamingsource.dmaap.config.DMaaPStreamingConfig;
 import com.test.cdap.plugins.streamingsource.dmaap.DMaapStreamSource;
 import com.google.common.collect.ImmutableSet;
+import com.test.cdap.plugins.streamingsource.dmaap.guice.DMaaPPluginFactory;
 import com.test.cdap.plugins.streamingsource.dmaap.receiver.FastHttpReceiver;
 import com.test.cdap.plugins.streamingsource.dmaap.receiver.MockHttpReceiver;
 import org.junit.*;
 import org.junit.rules.TemporaryFolder;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -73,6 +77,14 @@ public class DMaapStreamUnitTest extends HydratorTestBase {
 
     @Test
     public void testDMaapStreamingSource() throws Exception {
+
+        URL url = this.getClass().getClassLoader().getResource("guice.module");
+        String moduleClassName;
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"))) {
+            moduleClassName = reader.readLine();
+        }
+
+        System.out.println(moduleClassName);
 
         Map<String, String> properties = new HashMap<>();
         properties.put("dmaapHostName", "dmaapHostName");

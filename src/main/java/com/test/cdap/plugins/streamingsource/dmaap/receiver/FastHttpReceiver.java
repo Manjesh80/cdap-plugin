@@ -44,7 +44,8 @@ public class FastHttpReceiver implements CustomReceiver {
 
                 while (!abstractReceiver.isStopped()) {
                     try {
-                        TimeUnit.MILLISECONDS.sleep(100);
+                        //TimeUnit.MILLISECONDS.sleep(100);
+                        TimeUnit.MINUTES.sleep(2);
 
                         StructuredRecord recordForNow = StructuredRecord.builder(OUTPUT_SCHEMA).
                                 set("MESSAGE_NUM", Long.toString(System.currentTimeMillis())).
