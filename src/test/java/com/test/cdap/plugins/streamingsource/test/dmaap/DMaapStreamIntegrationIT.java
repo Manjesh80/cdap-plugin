@@ -21,6 +21,7 @@ import co.cask.cdap.proto.id.NamespaceId;
 import co.cask.cdap.test.ApplicationManager;
 import co.cask.cdap.test.DataSetManager;
 import co.cask.cdap.test.SparkManager;
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableSet;
 import com.test.cdap.plugins.streamingsource.dmaap.DMaapStreamSource;
 import com.test.cdap.plugins.streamingsource.dmaap.config.DMaaPStreamingConfig;
@@ -32,7 +33,11 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.net.URLClassLoader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -44,8 +49,9 @@ import java.util.concurrent.TimeUnit;
  * Created by cdap on 10/18/16.
  */
 
-public class DMaapStreamIntegrationTest extends HydratorTestBase {
+public class DMaapStreamIntegrationIT extends HydratorTestBase {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DMaapStreamIntegrationIT.class);
     protected static final ArtifactId DATASTREAMS_ARTIFACT_ID = NamespaceId.DEFAULT.artifact("data-streams", "3.2.0");
     protected static final ArtifactSummary DATASTREAMS_ARTIFACT = new ArtifactSummary("data-streams", "3.2.0");
 
@@ -55,6 +61,7 @@ public class DMaapStreamIntegrationTest extends HydratorTestBase {
     @BeforeClass
     public static void setupTest() throws Exception {
 
+        LOG.error("********* Test Message **********");
         setupStreamingArtifacts(DATASTREAMS_ARTIFACT_ID, DataStreamsApp.class);
 
         Set<ArtifactRange> parents = ImmutableSet.of(
@@ -63,9 +70,13 @@ public class DMaapStreamIntegrationTest extends HydratorTestBase {
                         new ArtifactVersion(DATASTREAMS_ARTIFACT_ID.getVersion()), true)
         );
 
+        //dumpClasspath(Class.forName("com.test.cdap.plugins.streamingsource.dmaap.DMaapStreamSource").getClassLoader());
+
         addPluginArtifact(NamespaceId.DEFAULT.artifact("spark-plugins", "1.0.0"), parents,
                 DMaapStreamSource.class, DMaaPStreamingConfig.class,
                 MockHttpReceiver.class, FastHttpReceiver.class);
+
+
     }
 
     @AfterClass
@@ -73,8 +84,26 @@ public class DMaapStreamIntegrationTest extends HydratorTestBase {
 
     }
 
+    public static void dumpClasspath(ClassLoader classLoader) {
+        LOG.error(" !!!!!!!!!!!!! Dumping ClassPath for classloader: {} !!!!!!!!!!!!!", classLoader);
+        if (classLoader instanceof URLClassLoader) {
+            URLClassLoader ucl = (URLClassLoader) classLoader;
+            LOG.error(Joiner.on("\r\n").join(ucl.getURLs()));
+            //LOG.error("\t ==========>>>" + Arrays.toString(ucl.getURLs()));
+        } else {
+            LOG.error("\t(cannot display components as not a URLClassLoader)");
+        }
+        if (classLoader.getParent() != null) {
+            dumpClasspath(classLoader.getParent());
+        }
+    }
+
     @Test
     public void testDMaapStreamingSource() throws Exception {
+
+        LOG.error("************************ START LOADING **********************");
+        dumpClasspath(getClass().getClassLoader());
+        LOG.error("************************ END LOADING **********************");
 
         Map<String, String> properties = new HashMap<>();
         properties.put("dmaapHostName", "dmaapHostName");
@@ -125,13 +154,16 @@ public class DMaapStreamIntegrationTest extends HydratorTestBase {
                         for (StructuredRecord record : MockSink.readOutput(outputManager)) {
                             dmaapContents.add((String) record.get("MESSAGE"));
                         }
-                        return dmaapContents.size() >= 4;
+                        return dmaapContents.size() >= 2;
                     }
                 },
                 1, TimeUnit.MINUTES);
 
-        Assert.assertTrue(dmaapContents.contains("country"));
-        Assert.assertTrue(dmaapContents.contains("country"));
         sparkManager.stop();
+
+        String allMessages = com.google.common.base.Joiner.on(",").join(dmaapContents);
+        Assert.assertTrue(allMessages.contains("country"));
+        Assert.assertTrue(allMessages.contains("country"));
+
     }
 }

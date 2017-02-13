@@ -51,7 +51,7 @@ public class FastHttpReceiver implements CustomReceiver {
                 while (!abstractReceiver.isStopped()) {
 
                     try {
-                        TimeUnit.MILLISECONDS.sleep(5000);
+                        TimeUnit.MILLISECONDS.sleep(1000);
 
 
                         long currentTime = System.currentTimeMillis();

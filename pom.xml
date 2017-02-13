@@ -207,10 +207,85 @@
             <version>2.8</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>13.0.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.plugin.version}</version>
+                <configuration>
+                    <skipTests>${skip.unit.tests}</skipTests>
+                    <argLine>-Xmx2048m -Djava.awt.headless=true -XX:+UseConcMarkSweepGC
+                        -XX:OnOutOfMemoryError="kill -9 %p" -XX:+HeapDumpOnOutOfMemoryError
+                    </argLine>
+                    <redirectTestOutputToFile>${surefire.redirectTestOutputToFile}</redirectTestOutputToFile>
+                    <parallel>methods</parallel>
+                    <threadCount>8</threadCount>
+                    <forkCount>8</forkCount>
+                    <reuseForks>true</reuseForks>
+                    <reportFormat>xml</reportFormat>
+                    <trimStackTrace>false</trimStackTrace>
+                    <systemPropertyVariables>
+                        <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
+                        <logback.configurationFile>
+                            ${basedir}/src/test/resources/logback-test.xml
+                        </logback.configurationFile>
+                    </systemPropertyVariables>
+                    <includes>
+                        <include>${unit.test.pattern}</include>
+                    </includes>
+                    <excludes>
+                        <exclude>${integration.test.pattern}</exclude>
+                    </excludes>
+                    <!-- Sets the VM argument line used when unit tests are run. -->
+                    <argLine>${surefireArgLine}</argLine>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>${surefire.plugin.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.19.1</version>
+                <configuration>
+                    <argLine>-Xmx2048m -Djava.awt.headless=true -XX:+UseConcMarkSweepGC
+                        -XX:OnOutOfMemoryError="kill -9 %p" -XX:+HeapDumpOnOutOfMemoryError
+                    </argLine>
+                    <systemPropertyVariables>
+                        <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
+                    </systemPropertyVariables>
+                    <additionalClasspathElements>
+                        <additionalClasspathElement></additionalClasspathElement>
+                    </additionalClasspathElements>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -273,8 +348,6 @@
                         <!--Only @Plugin classes in the export packages will be included as plugin-->
                         <_exportcontents>
                             com.test.cdap.*;
-                            com.test.cdap.plugins.realtimesink.*;
-                            com.test.cdap.plugins.batchsink.*;
                         </_exportcontents>
                     </instructions>
                 </configuration>
