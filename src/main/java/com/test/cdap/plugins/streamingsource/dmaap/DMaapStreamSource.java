@@ -29,6 +29,8 @@ public class DMaapStreamSource extends AbstractStreamingSource {
 
     @Override
     public Receiver<StructuredRecord> getReceiver() {
+        LOG.error("!!!!!!!!!!!! hostname " + this.conf.getDMaapHostName());
+        LOG.error("!!!!!!!!!!!! topicName " + this.conf.getDmaapTopicName());
         return new DMaaPReceiver(StorageLevel.MEMORY_ONLY(), this.conf);
     }
 }

@@ -1,6 +1,7 @@
 package com.test.cdap.plugins.streamingsource.dmaap.config;
 
 import co.cask.cdap.api.annotation.Description;
+import co.cask.cdap.api.annotation.Macro;
 import co.cask.cdap.api.annotation.Name;
 import co.cask.cdap.api.plugin.PluginConfig;
 
@@ -48,6 +49,7 @@ public class DMaaPStreamingConfig extends PluginConfig {
     @Nullable
     @Name(DMAAP_HOSTNAME)
     @Description("DMaap Hostname")
+    @Macro
     private String dmaapHostName;
     public String getDMaapHostName() {
         return dmaapHostName;
@@ -56,6 +58,7 @@ public class DMaaPStreamingConfig extends PluginConfig {
     @Nullable
     @Name(DMAAP_TOPICNAME)
     @Description("DMaap Topic Name")
+    @Macro
     private String dmaapTopicName;
     public String getDmaapTopicName() {
         return dmaapTopicName;
