@@ -130,8 +130,8 @@ public class DMaapStreamIntegrationTest extends HydratorTestBase {
                 },
                 1, TimeUnit.MINUTES);
 
-        Assert.assertTrue(dmaapContents.contains("Message 202"));
-        Assert.assertTrue(dmaapContents.contains("Message 203"));
+        Assert.assertTrue(dmaapContents.contains("country"));
+        Assert.assertTrue(dmaapContents.contains("country"));
         sparkManager.stop();
     }
 }

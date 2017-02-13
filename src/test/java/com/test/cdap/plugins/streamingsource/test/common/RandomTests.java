@@ -18,7 +18,6 @@ import java.util.concurrent.TimeUnit;
 
 public class RandomTests {
 
-    @Test
     public void testKey() throws InterruptedException {
 
         int currentMinute = ((new DateTime()).getMinuteOfHour())%2;

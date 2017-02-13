@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public abstract class AbstractStreamingSource extends StreamingSource<StructuredRecord> {
 
-    @Override
+    /*@Override
     public void configurePipeline(PipelineConfigurer pipelineConfigurer) throws IllegalArgumentException {
         super.configurePipeline(pipelineConfigurer);
         Map<String, String> props = new HashMap<>();
@@ -27,7 +27,7 @@ public abstract class AbstractStreamingSource extends StreamingSource<Structured
         pipelineConfigurer.createDataset("runtimeargs",
                 KeyValueTable.class.getName(), DatasetProperties.builder().addAll(props).build());
 
-    }
+    }*/
 
     @Override
     public JavaDStream<StructuredRecord> getStream(StreamingContext streamingContext) throws Exception {
