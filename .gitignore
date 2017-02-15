@@ -4,3 +4,4 @@
 /cdap-plugin.iml
 custom-module-test/target/*
 custom-module/target/*
+*.hprof
