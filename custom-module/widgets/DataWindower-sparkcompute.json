@@ -1,0 +1,28 @@
+{
+  "metadata": {
+    "spec-version": "1.0"
+  },
+  "configuration-groups": [
+    {
+      "label": "Daawindower Properties",
+      "properties": [
+        {
+          "widget-type": "textbox",
+          "label": "Field to be used to apply window operation.",
+          "name": "messageField"
+        },
+        {
+          "widget-type": "textbox",
+          "label": "Window duration to qualify a message as stale or new",
+          "name": "windowDuration"
+        },
+        {
+          "widget-type": "textbox",
+          "label": "Field to indicate the status of the message",
+          "name": "messageStatus"
+        }
+      ]
+    }
+  ],
+  "outputs": []
+}
