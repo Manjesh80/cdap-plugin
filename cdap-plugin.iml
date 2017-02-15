@@ -12,7 +12,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: co.cask.cdap:cdap-api:4.0.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: co.cask.cdap:cdap-api-common:4.0.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.code.findbugs:jsr305:2.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:2.0.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.code.gson:gson:2.2.4" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.tephra:tephra-api:0.10.0-incubating" level="project" />
@@ -110,7 +110,7 @@
     <orderEntry type="module-library">
       <library name="Maven: jdk.tools:jdk.tools:1.6">
         <CLASSES>
-          <root url="jar:///usr/lib/jvm/jdk1.7.0_75/jre/../lib/tools.jar!/" />
+          <root url="jar://C:/Program Files/Java/jdk1.8.0_101/jre/../lib/tools.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -278,7 +278,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: it.unimi.dsi:fastutil:6.5.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.sun.jersey:jersey-servlet:1.18" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: co.cask.cdap:cdap-data-streams:4.0.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.guava:guava:13.0.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: co.cask.cdap:cdap-api-spark:4.0.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: co.cask.cdap:cdap-etl-core:4.0.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: ch.qos.logback:logback-classic:1.0.9" level="project" />
@@ -304,5 +303,6 @@
     <orderEntry type="library" name="Maven: net.minidev:accessors-smart:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm:5.0.3" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.8" level="project" />
+    <orderEntry type="library" name="Maven: com.google.guava:guava:13.0.1" level="project" />
   </component>
 </module>

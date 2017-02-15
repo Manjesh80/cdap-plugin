@@ -1,0 +1,14 @@
+----------------------------------------------------------------
+Wed Feb 15 12:08:59 EST 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-015a-42bf-a292-000011d6ff98 
+on database directory C:\learn\workspace\cdap-plugin\custom-module-test\target\junit2037735933672881252\hive\database\1487178538364 with class loader co.cask.cdap.common.app.MainClassLoader@13acb0d1 
+Loaded from file:/C:/Users/MG153V/.m2/repository/org/apache/derby/derby/10.10.2.0/derby-10.10.2.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_101-b13
+user.dir=C:\learn\workspace\cdap-plugin\custom-module-test
+os.name=Windows 7
+os.arch=amd64
+os.version=6.1
+derby.system.home=null
+derby.stream.error.file=C:\learn\workspace\cdap-plugin\custom-module-test\target\junit2037735933672881252\hive\derby.log
+Database Class Loader started - derby.database.classpath=''
