@@ -30,7 +30,7 @@
         <cdap.version>4.0.0</cdap.version>
         <spark.version>1.6.1</spark.version>
         <hadoop.version>2.3.0</hadoop.version>
-        <!-- properties for script build step that creates the config files for the artifacts -->
+        <!-- properties for script build step that creates the dataWindowerConfig files for the artifacts -->
         <widgets.dir>widgets</widgets.dir>
         <docs.dir>docs</docs.dir>
         <app.parents>
@@ -293,12 +293,12 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.7</version>
                 <executions>
-                    <!-- Create the config file for artifact which can be used to deploy the artifact.
+                    <!-- Create the dataWindowerConfig file for artifact which can be used to deploy the artifact.
                          Sets the parents field to system:cdap-etl-batch and system:cdap-etl-realtime with whatever
                          version range is set in the etl.versionRange property.
                          also sets a widget and doc property for each file contained in the widgets and docs directories. -->
                     <execution>
-                        <id>create-artifact-config</id>
+                        <id>create-artifact-dataWindowerConfig</id>
                         <phase>prepare-package</phase>
                         <configuration>
                             <target>
@@ -318,17 +318,17 @@
                   }
 
                   var parents = project.getProperty("app.parents").split(",");
-                  var config = {
+                  var dataWindowerConfig = {
                     "parents": [ ],
                     "properties": {}
                   }
                   for (i = 0; i < parents.length; i+=2) {
                     // because name1[lo,hi],name2[lo,hi] gets split into "name1[lo", "hi]", "name2[lo", "hi]"
                     // so we have to combine them again
-                    config.parents.push(parents[i] + "," + parents[i+1]);
+                    dataWindowerConfig.parents.push(parents[i] + "," + parents[i+1]);
                   }
 
-                  // look in widgets directory for widget config for each plugin
+                  // look in widgets directory for widget dataWindowerConfig for each plugin
                   var widgetsDir = new java.io.File(baseDir, project.getProperty("widgets.dir"));
                   if (widgetsDir.isDirectory()) {
                     var widgetsFiles = widgetsDir.listFiles();
@@ -342,7 +342,7 @@
                           propertyName = propertyName.slice(0, -5);
                           var contents = new java.lang.String(java.nio.file.Files.readAllBytes(widgetsFile.toPath()), java.nio.charset.StandardCharsets.UTF_8);
                           var contentsAsJson = JSON.parse(contents);
-                          config.properties[propertyName] = JSON.stringify(contentsAsJson);
+                          dataWindowerConfig.properties[propertyName] = JSON.stringify(contentsAsJson);
                         }
                       }
                     }
@@ -361,14 +361,14 @@
                           // strip the extension
                           propertyName = propertyName.slice(0, -3);
                           var contents = new java.lang.String(java.nio.file.Files.readAllBytes(docFile.toPath()), java.nio.charset.StandardCharsets.UTF_8);
-                          config.properties[propertyName] = contents + "";
+                          dataWindowerConfig.properties[propertyName] = contents + "";
                         }
                       }
                     }
                   }
 
                   var fw = new java.io.BufferedWriter(new java.io.FileWriter(cfgFile.getAbsoluteFile()));
-                  fw.write(JSON.stringify(config, null, 2));
+                  fw.write(JSON.stringify(dataWindowerConfig, null, 2));
                   fw.close();
                 ]]></script>
                             </target>

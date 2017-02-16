@@ -34,7 +34,7 @@
         <cdap.version>4.0.0</cdap.version>
         <spark.version>1.6.1</spark.version>
         <hadoop.version>2.3.0</hadoop.version>
-        <!-- properties for script build step that creates the config files for the artifacts -->
+        <!-- properties for script build step that creates the dataWindowerConfig files for the artifacts -->
         <widgets.dir>widgets</widgets.dir>
         <docs.dir>docs</docs.dir>
         <app.parents>

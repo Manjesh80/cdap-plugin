@@ -1,5 +1,9 @@
 package com.test.cdap.plugins.compute;
 
+/**
+ * Created by cdap on 2/16/17.
+ */
+
 import co.cask.cdap.api.annotation.Description;
 import co.cask.cdap.api.annotation.Macro;
 import co.cask.cdap.api.annotation.Name;
@@ -24,24 +28,24 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Author: mg153v (Manjesh Gowda). Creation Date: 2/15/2017.
+ * DataWindowerExt - SparkCompute to transform input features into n-grams.
  */
-
 @Plugin(type = SparkCompute.PLUGIN_TYPE)
-@Name(DataWindower.PLUGIN_NAME)
-@Description("Pluging that applies windowing on a given message")
-public class DataWindower extends SparkCompute<StructuredRecord, StructuredRecord> {
+@Name(DataWindowerExt.PLUGIN_NAME)
+@Description("Used to transform input features into n-grams.")
+public class DataWindowerExt extends SparkCompute<StructuredRecord, StructuredRecord> {
+    private static final Logger LOG = LoggerFactory.getLogger(DataWindowerExt.class);
+    public static final String PLUGIN_NAME = "DataWindowerExt";
+    private DataWindowerExtConfig dataWindowerConfig;
 
-    private static final Logger LOG = LoggerFactory.getLogger(DataWindower.class);
-    public static final String PLUGIN_NAME = "DataWindower";
-    private DataWindowerConfig dataWindowerConfig;
-
-    public DataWindower(DataWindowerConfig dataWindowerConfig) {
+    public DataWindowerExt(DataWindowerExtConfig dataWindowerConfig) {
         this.dataWindowerConfig = dataWindowerConfig;
     }
 
-    public static class DataWindowerConfig extends PluginConfig {
-        private final Logger LOG = LoggerFactory.getLogger(DataWindowerConfig.class);
+    /**
+     * Configuration for the DataWindowerExt Plugin.
+     */
+    public static class DataWindowerExtConfig extends PluginConfig {
 
         @Description("Field to be used to apply window operation.")
         public final String messageField;
@@ -57,7 +61,7 @@ public class DataWindower extends SparkCompute<StructuredRecord, StructuredRecor
         @Description("Output schema")
         public final String schema;
 
-        public DataWindowerConfig(String messageField, Integer windowDuration, String messageStatus, String schema) {
+        public DataWindowerExtConfig(String messageField, Integer windowDuration, String messageStatus, String schema) {
             this.messageField = messageField;
             this.windowDuration = windowDuration;
             this.messageStatus = messageStatus;
@@ -65,14 +69,10 @@ public class DataWindower extends SparkCompute<StructuredRecord, StructuredRecor
         }
     }
 
-
-
     @Override
     public void configurePipeline(PipelineConfigurer pipelineConfigurer) throws IllegalArgumentException {
-
         super.configurePipeline(pipelineConfigurer);
-
-        /*Schema messageHistorySchema =
+        Schema messageHistorySchema =
                 Schema.recordOf("messageHistorySchema",
                         Schema.Field.of("message", Schema.of(Schema.Type.STRING)),
                         Schema.Field.of("lastNotified", Schema.of(Schema.Type.LONG)));
@@ -102,25 +102,14 @@ public class DataWindower extends SparkCompute<StructuredRecord, StructuredRecor
         }
         if (inputSchema != null && inputSchema.getField(dataWindowerConfig.messageStatus) == null) {
             throw new IllegalArgumentException(String.format("Field %s is not present in input schema", dataWindowerConfig.messageStatus));
-        }*/
+        }
     }
-
-   /* @Override
-    public void initialize(SparkExecutionPluginContext context) throws Exception {
-        super.initialize(context);
-        *//*try {
-            outSchema = Schema.parseJson(dataWindowerConfig.schema);
-            fields = outSchema.getFields();
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Output Schema specified is not a valid JSON. Please check the Schema JSON.");
-        }*//*
-    }*/
 
     @Override
     public JavaRDD<StructuredRecord> transform(SparkExecutionPluginContext context,
                                                JavaRDD<StructuredRecord> javaRDD) throws Exception {
-        return null;
-        /*final Table messageHistoryTable = context.getDataset("messageHistory");
+        LOG.error("************* " + context.getClass().toString() + "************* ");
+        final Table messageHistoryTable = context.getDataset("messageHistory");
         final Schema outputSchema = Schema.parseJson(dataWindowerConfig.schema);
         JavaRDD<StructuredRecord> convertedRDD = javaRDD.map(new Function<StructuredRecord, StructuredRecord>() {
             @Override
@@ -164,13 +153,7 @@ public class DataWindower extends SparkCompute<StructuredRecord, StructuredRecor
                 return builder.build();
             }
         });
-        *//*JavaRDD<StructuredRecord> convertedRDD = javaRDD.map(new DataWindowMapper(dataWindowerConfig,
-                outSchema, messageHistoryTable)); *//*
-        return convertedRDD;*/
+        return convertedRDD;
     }
 }
-
-
-
-
 
