@@ -49,7 +49,8 @@ public class DataWindower extends SparkCompute<StructuredRecord, StructuredRecor
         SQLContext sqlContext = new SQLContext(javaSparkContext);
         StructType schema = new StructType(new StructField[]{
                 new StructField(dataWindowerConfig.messageStatus, DataTypes.StringType, false, Metadata.empty())});
-        JavaRDD<StructuredRecord> convertedRDD = javaRDD.map(new DataWindowMapper(dataWindowerConfig.messageStatus));
+        JavaRDD<StructuredRecord> convertedRDD = javaRDD.map(new DataWindowMapper(dataWindowerConfig.messageStatus,
+                dataWindowerConfig));
         return convertedRDD;
     }
 }
