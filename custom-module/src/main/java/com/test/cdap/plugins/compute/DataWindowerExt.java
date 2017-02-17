@@ -37,14 +37,12 @@ public class DataWindowerExt extends SparkCompute<StructuredRecord, StructuredRe
     private static final Logger LOG = LoggerFactory.getLogger(DataWindowerExt.class);
     public static final String PLUGIN_NAME = "DataWindowerExt";
     private DataWindowerExtConfig dataWindowerConfig;
+    private Table messageHistoryTable;
 
     public DataWindowerExt(DataWindowerExtConfig dataWindowerConfig) {
         this.dataWindowerConfig = dataWindowerConfig;
     }
 
-    /**
-     * Configuration for the DataWindowerExt Plugin.
-     */
     public static class DataWindowerExtConfig extends PluginConfig {
 
         @Description("Field to be used to apply window operation.")
@@ -70,6 +68,13 @@ public class DataWindowerExt extends SparkCompute<StructuredRecord, StructuredRe
     }
 
     @Override
+    public void initialize(SparkExecutionPluginContext context) throws Exception {
+        super.initialize(context);
+        LOG.error("************* initialize *** " + context.getClass().toString() + "************* ");
+        messageHistoryTable = context.getDataset("messageHistory");
+    }
+
+    @Override
     public void configurePipeline(PipelineConfigurer pipelineConfigurer) throws IllegalArgumentException {
         super.configurePipeline(pipelineConfigurer);
         Schema messageHistorySchema =
@@ -86,30 +91,27 @@ public class DataWindowerExt extends SparkCompute<StructuredRecord, StructuredRe
         try {
             Schema outputSchema = Schema.parseJson(dataWindowerConfig.schema);
             pipelineConfigurer.getStageConfigurer().setOutputSchema(outputSchema);
-            //fields = outputSchema.getFields();
-
-            if (outputSchema.getField(dataWindowerConfig.messageStatus) == null) {
-                throw new IllegalArgumentException(String.format("Field %s is not present in output schema", dataWindowerConfig.messageStatus));
-            }
-
         } catch (IOException e) {
             throw new IllegalArgumentException("Output Schema specified is not a valid JSON. Please check the Schema JSON.");
-        }
-
-        Schema inputSchema = pipelineConfigurer.getStageConfigurer().getInputSchema();
-        if (inputSchema != null && inputSchema.getField(dataWindowerConfig.messageField) == null) {
-            throw new IllegalArgumentException(String.format("Field %s is not present in input schema", dataWindowerConfig.messageField));
-        }
-        if (inputSchema != null && inputSchema.getField(dataWindowerConfig.messageStatus) == null) {
-            throw new IllegalArgumentException(String.format("Field %s is not present in input schema", dataWindowerConfig.messageStatus));
         }
     }
 
     @Override
     public JavaRDD<StructuredRecord> transform(SparkExecutionPluginContext context,
                                                JavaRDD<StructuredRecord> javaRDD) throws Exception {
+
         LOG.error("************* " + context.getClass().toString() + "************* ");
-        final Table messageHistoryTable = context.getDataset("messageHistory");
+
+        /*LOG.error("*************  Test Table access outside RDD - Start ************* ");
+        Row testRow = messageHistoryTable.get(new Get("CDAP"));
+        if (!testRow.isEmpty())
+            LOG.error(" ----------------- TEST ROW NOT EMPTY -------------------");
+        else
+            LOG.error(" $$$$$$$$$$$$$$$$$$$$$$$$$ TEST ROW  EMPTY $$$$$$$$$$$$$$$$$$$$$$$$$");
+
+        LOG.error("*************  Test Table access outside RDD - end ************* "); */
+
+
         final Schema outputSchema = Schema.parseJson(dataWindowerConfig.schema);
         JavaRDD<StructuredRecord> convertedRDD = javaRDD.map(new Function<StructuredRecord, StructuredRecord>() {
             @Override
