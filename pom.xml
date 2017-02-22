@@ -50,6 +50,7 @@
         <!--<jackson.json.version>2.8.5</jackson.json.version>-->
         <jackson.json.version>2.4.6</jackson.json.version>
         <surefire.plugin.version>2.19.1</surefire.plugin.version>
+        <failsafe.plugin.version>2.19.1</failsafe.plugin.version>
         <skip.unit.tests>true</skip.unit.tests>
         <integration.test.pattern>**/*IT.java</integration.test.pattern>
         <skip.integration.tests>true</skip.integration.tests>

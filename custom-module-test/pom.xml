@@ -173,61 +173,31 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${failsafe.plugin.version}</version>
                 <executions>
                     <execution>
-                        <phase>compile</phase>
+                        <id>integration-tests</id>
                         <goals>
-                            <goal>run</goal>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
                         </goals>
                         <configuration>
-                            <tasks>
-                                <echoproperties/>
-                            </tasks>
+                           <skipTests>${skip.integration.tests}</skipTests>
+                            <!-- <argLine>${surefireArgLine}</argLine> -->
+                            <argLine>-Xmx2048m -Djava.awt.headless=true -XX:+UseConcMarkSweepGC
+                                -XX:OnOutOfMemoryError="kill -9 %p" -XX:+HeapDumpOnOutOfMemoryError
+                                -Dcuke4duke.objectFactory=cuke4duke.internal.jvmclass.GuiceFactory
+                            </argLine>
+                            <systemPropertyVariables>
+                                <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
+                                <logback.configurationFile>
+                                    ${basedir}/src/test/resources/logback-test.xml
+                                </logback.configurationFile>
+                            </systemPropertyVariables>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${surefire.plugin.version}</version>
-                <configuration>
-                    <additionalClasspathElements>
-                        <additionalClasspathElement>${basedir}/../custom-module/target/classes</additionalClasspathElement>
-                    </additionalClasspathElements>
-                    <skipTests>${skip.unit.tests}</skipTests>
-                    <argLine>-Xmx2048m -Djava.awt.headless=true -XX:+UseConcMarkSweepGC
-                        -XX:OnOutOfMemoryError="kill -9 %p" -XX:+HeapDumpOnOutOfMemoryError
-                    </argLine>
-                    <redirectTestOutputToFile>${surefire.redirectTestOutputToFile}</redirectTestOutputToFile>
-                    <parallel>methods</parallel>
-                    <threadCount>8</threadCount>
-                    <forkCount>8</forkCount>
-                    <reuseForks>true</reuseForks>
-                    <reportFormat>xml</reportFormat>
-                    <trimStackTrace>false</trimStackTrace>
-                    <systemPropertyVariables>
-                        <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
-                        <logback.configurationFile>
-                            ${basedir}/src/test/resources/logback-test.xml
-                        </logback.configurationFile>
-                    </systemPropertyVariables>
-                    <includes>
-                        <include>${unit.test.pattern}</include>
-                    </includes>
-                    <!-- Sets the VM argument line used when unit tests are run. -->
-                    <argLine>${surefireArgLine}</argLine>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-junit47</artifactId>
-                        <version>${surefire.plugin.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
 
         </plugins>

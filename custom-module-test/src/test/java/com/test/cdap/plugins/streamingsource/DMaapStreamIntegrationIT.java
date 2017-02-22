@@ -47,9 +47,9 @@ import java.util.concurrent.TimeUnit;
  * Created by cdap on 10/18/16.
  */
 
-public class DMaapStreamIntegrationTest extends HydratorTestBase {
+public class DMaapStreamIntegrationIT extends HydratorTestBase {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DMaapStreamIntegrationTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DMaapStreamIntegrationIT.class);
     protected static final ArtifactId DATASTREAMS_ARTIFACT_ID = NamespaceId.DEFAULT.artifact("data-streams", "3.2.0");
     protected static final ArtifactSummary DATASTREAMS_ARTIFACT = new ArtifactSummary("data-streams", "3.2.0");
 
@@ -68,11 +68,8 @@ public class DMaapStreamIntegrationTest extends HydratorTestBase {
                         new ArtifactVersion(DATASTREAMS_ARTIFACT_ID.getVersion()), true)
         );
 
-        //dumpClasspath(Class.forName("DMaapStreamSource").getClassLoader());
-
         addPluginArtifact(NamespaceId.DEFAULT.artifact("spark-plugins", "1.0.0"), parents,
                 DMaapStreamSource.class, DMaaPStreamingConfig.class, FastHttpReceiver.class);
-
 
     }
 
